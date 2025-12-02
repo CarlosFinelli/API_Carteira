@@ -2,5 +2,6 @@ export const TableNames = {
     Usuarios: "users",
     Carteira: "carteira",
     Pacotes: "pacotes",
-    Compras: "compras"
+    Compras: "compras",
+    ExtratoCarteira: "extratos"
 }

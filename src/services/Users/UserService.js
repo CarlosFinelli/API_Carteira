@@ -19,12 +19,11 @@ class UserService {
         let user = await UserModel.findByEmail(data.email);
 
         if (!user) {
-            // Usuário novo — cria com senha null e tipo default
             user = await UserModel.create({
                 nome: data.nome,
                 email: data.email,
-                senha: null,     // senha é opcional no OAuth
-                tipo: "usuario"  // padrão
+                senha: null,     
+                tipo: "usuario" 
             });
         } else {
             throw new Error("Usuário já cadastrado no sistema!");

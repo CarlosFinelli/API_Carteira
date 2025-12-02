@@ -46,10 +46,17 @@ class CarteiraController {
 
     async update(req, res) {
         try {
-        const {id} = req.params;
-        const {data} = req.body;
-        const result = await CarteiraService.update(id, data);
-        return res.status(200).json(result);
+            console.log(JSON.stringify(req.body));
+            const {id} = req.params;
+            const {valorMoeda, valorMilhas, fk_idPacote} = req.body;
+            const data = {
+                saldoDinheiro: valorMoeda,
+                saldoMilhas: valorMilhas,
+                fk_idPacote: fk_idPacote
+            }
+            console.log(`Controller data: ${data}`)
+            const result = await CarteiraService.update(id, data);
+            return res.status(200).json(result);
         } catch(error) {
             console.log(`Erro ao buscar carteira: ${error.message}`);
             return res.status(400).json({ message: `Erro ao atualizar carteira: ${error.message}`})

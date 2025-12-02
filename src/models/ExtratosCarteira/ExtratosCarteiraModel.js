@@ -1,8 +1,8 @@
 import connection from "../../config/db.js";
 import { TableNames } from "../../../util/TableNames.js";
-const tableName = TableNames.Carteira;
+const tableName = TableNames.ExtratoCarteira;
 
-class CarteiraModel {
+class ExtratoCarteiraModel {
     async findAll() {
         const [rows] = await connection.query(`SELECT * FROM ${tableName}`);
 
@@ -15,40 +15,39 @@ class CarteiraModel {
             
             return rows[0] || null;
         } catch(error) {
-            console.log(`Erro ao recuperar usuário: ${error.message}`);
-            throw new Error("Erro ao buscar usuário por id");
+            console.log(`Erro ao recuperar extrato: ${error.message}`);
+            throw new Error("Erro ao buscar extrato por id");
         }
     }
-
-    async findByUser(id) {
+    
+    async findByCarteira(id) {
         try {
-            const [rows] = await connection.query(`SELECT * FROM ${tableName} WHERE fk_idUser = ?`, [id]);
+            const [rows] = await connection.query(`SELECT * FROM ${tableName} WHERE fk_idCarteira = ?`, [id])
 
-            return rows[0] || null;
+            return rows;
         } catch(error) {
-            console.log(`Erro ao recuperar a carteira do usuário: ${error.message}`);
-            throw new Error("Erro ao buscar carteira por usuário");
+            console.log(`Erro ao recuperar histórico de transações: ${error.message}`);
+            throw new Error("Erro ao recuperar histórico de transações");
         }
     }
 
     async create(data) {
         try {
-            const query = `INSERT INTO ${tableName} (saldoDinheiro, saldoMilhas) VALUES (?, ?)`
-            const values = [data.saldoDinheiro, data.saldoMilhas, id];
+            const query = `INSERT INTO ${tableName} (valorPagoMoeda, valorPagoMilhas, fk_idUser, fk_idPacote) VALUES (?, ?, ?, ?)`
+            const values = [data.valorMoeda, data.valorMilhas, data.fk_idUser, data.fk_idPacote];
 
             const [result] = await connection.query(query, values);
 
             return { id: result.insertId, ...data };
         } catch(error) {
-            console.error(`Erro ao criar usuário: ${error.message}`);
-            throw new Error("Erro ao criar usuário");
+            console.error(`Erro ao criar pacote: ${error.message}`);
+            throw new Error("Erro ao criar pacote");
         }
     }
 
     async update(id, data) {
         try {
-            console.log(`Model data: ${JSON.stringify(data)}`);
-            const allowedFields = ["saldoDinheiro", "saldoMilhas"];
+            const allowedFields = ["valorPagoMoeda", "valorPagoMilhas", "fk_idUser", "fk_idPacote"];
             const keys = Object.keys(data).filter(key => allowedFields.includes(key));
             // const query = `UPDATE ${tableName} SET saldoDinheiro = ?, saldoMilhas = ? WHERE id = ?`;
 
@@ -72,10 +71,10 @@ class CarteiraModel {
 
             const [result] = await connection.query(query, values);
 
-            return { message: "Carteira atualizada com sucesso!", updatedFields: keys};
+            return { message: "Pacote atualizada com sucesso!", updatedFields: keys};
         } catch(error) {
-            console.error(`Erro ao atualizar carteira: ${error.message}`);
-            throw new Error("Erro ao atualizar carteira!");
+            console.error(`Erro ao atualizar pacote: ${error.message}`);
+            throw new Error("Erro ao atualizar usuário!");
         }
     }
 
@@ -87,15 +86,15 @@ class CarteiraModel {
             );
 
             if (result.affectedRows == 0) {
-                console.error(`Erro ao deletar carteira de id ${i}`, error.message);
-                throw new Error("Erro ao deletar carteira");
+                console.error(`Erro ao deletar compra de id ${i}`, error.message);
+                throw new Error("Erro ao deletar compra");
             }
-            return `Sucesso ao deletar carteira do usuário!`
+            return `Sucesso ao deletar compra!`
         } catch (error) {
-            console.error("Erro ao deletar carteira de usuário!:", error.message);
-            throw new Error("Erro ao deletar carteira de usuário");
+            console.error("Erro ao deletar compra!:", error.message);
+            throw new Error("Erro ao deletar compra");
         }
     }
 }
 
-export default new CarteiraModel();
+export default new ExtratoCarteiraModel();
