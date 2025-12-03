@@ -12,7 +12,7 @@ CREATE TABLE users(
     tipo ENUM("usuario", "agente") DEFAULT "usuario"
 );
 
-insert into users(nome, email, senha) values ('carlos', 'carlos@gmail.com', 'teste');
+insert into users(nome, email, senha, tipo) values ('Admin', 'admin@admin.com', '$2b$10$IahKX5aefeETj7YcMBa/W.AEx3w1t4DjFviKJoZfriGTtgFj/b5ai', "agente");
 
 CREATE TABLE carteira(
 	id INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL,
@@ -78,4 +78,3 @@ BEGIN
 END$$
 
 DELIMITER ;
-	
